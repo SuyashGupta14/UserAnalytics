@@ -27,6 +27,27 @@ router.get('/', async (req: Request, res: Response) => {
                   $sum: { $cond: [{ $eq: ['$type', 'page_view'] }, 1, 0] },
                 },
                 sessions: { $addToSet: '$session_id' },
+                unique_pages: { $addToSet: '$page_url' },
+              },
+            },
+          ],
+          sessionDurations: [
+            {
+              $group: {
+                _id: '$session_id',
+                start: { $min: '$timestamp' },
+                end: { $max: '$timestamp' },
+              },
+            },
+            {
+              $project: {
+                duration_ms: { $subtract: ['$end', '$start'] },
+              },
+            },
+            {
+              $group: {
+                _id: null,
+                avg_duration_ms: { $avg: '$duration_ms' },
               },
             },
           ],
@@ -44,14 +65,18 @@ router.get('/', async (req: Request, res: Response) => {
       total_clicks: 0,
       total_page_views: 0,
       sessions: [],
+      unique_pages: [],
     };
     const totalSessions = totals.sessions?.length || 0;
+    const avgDurationMs = overview.sessionDurations[0]?.avg_duration_ms || 0;
 
     res.json({
       total_sessions: totalSessions,
       total_events: totals.total_events,
       total_clicks: totals.total_clicks,
       total_page_views: totals.total_page_views,
+      unique_pages: totals.unique_pages?.length || 0,
+      avg_duration_seconds: Math.round(avgDurationMs / 1000),
       avg_events_per_session: totalSessions > 0 ? Math.round(totals.total_events / totalSessions) : 0,
       sessions_last_24h: overview.recent[0]?.count || 0,
     });

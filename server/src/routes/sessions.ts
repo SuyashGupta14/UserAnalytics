@@ -96,14 +96,22 @@ router.get('/:sessionId/events', async (req: Request, res: Response) => {
     }
 
     const pageUrls = [...new Set(events.map((e) => e.page_url))];
+    const pageViews = events.filter((e) => e.type === 'page_view').length;
+    const clicks = events.filter((e) => e.type === 'click').length;
+    const firstSeen = events[0].timestamp;
+    const lastSeen = events[events.length - 1].timestamp;
+    const durationSeconds = Math.max(0, Math.round((new Date(lastSeen).getTime() - new Date(firstSeen).getTime()) / 1000));
 
     res.json({
       session_id: sessionId,
       events,
       summary: {
         event_count: events.length,
-        first_seen: events[0].timestamp,
-        last_seen: events[events.length - 1].timestamp,
+        page_views: pageViews,
+        clicks: clicks,
+        duration_seconds: durationSeconds,
+        first_seen: firstSeen,
+        last_seen: lastSeen,
         pages_visited: pageUrls,
       },
     });

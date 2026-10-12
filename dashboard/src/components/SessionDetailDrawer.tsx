@@ -75,26 +75,34 @@ export const SessionDetailDrawer: React.FC<SessionDetailDrawerProps> = ({
           </button>
         </div>
 
-        {sessionData && (
-          <div className="drawer-summary-ribbon">
-            <div className="ribbon-item">
-              <Clock size={14} className="text-emerald" />
-              <span>Duration: <strong>{formatDuration(sessionData.summary.duration_seconds)}</strong></span>
+        {sessionData && (() => {
+          const pageViewsCount = sessionData.summary?.page_views ?? sessionData.events.filter((e) => e.type === 'page_view').length;
+          const clicksCount = sessionData.summary?.clicks ?? sessionData.events.filter((e) => e.type === 'click').length;
+          const computedDuration = sessionData.summary?.duration_seconds ?? (sessionData.events.length > 1
+            ? Math.max(0, Math.round((new Date(sessionData.events[sessionData.events.length - 1].timestamp).getTime() - new Date(sessionData.events[0].timestamp).getTime()) / 1000))
+            : 0);
+
+          return (
+            <div className="drawer-summary-ribbon">
+              <div className="ribbon-item">
+                <Clock size={14} className="text-emerald" />
+                <span>Duration: <strong>{formatDuration(computedDuration)}</strong></span>
+              </div>
+              <div className="ribbon-item">
+                <Eye size={14} className="text-cyan" />
+                <span>Page Views: <strong>{pageViewsCount}</strong></span>
+              </div>
+              <div className="ribbon-item">
+                <MousePointerClick size={14} className="text-amber" />
+                <span>Clicks: <strong>{clicksCount}</strong></span>
+              </div>
+              <div className="ribbon-item">
+                <Layers size={14} className="text-indigo" />
+                <span>Total Events: <strong>{sessionData.summary?.event_count ?? sessionData.events.length}</strong></span>
+              </div>
             </div>
-            <div className="ribbon-item">
-              <Eye size={14} className="text-cyan" />
-              <span>Page Views: <strong>{sessionData.summary.page_views}</strong></span>
-            </div>
-            <div className="ribbon-item">
-              <MousePointerClick size={14} className="text-amber" />
-              <span>Clicks: <strong>{sessionData.summary.clicks}</strong></span>
-            </div>
-            <div className="ribbon-item">
-              <Layers size={14} className="text-indigo" />
-              <span>Total Events: <strong>{sessionData.summary.event_count}</strong></span>
-            </div>
-          </div>
-        )}
+          );
+        })()}
 
         <div className="drawer-body">
           {loading ? (
