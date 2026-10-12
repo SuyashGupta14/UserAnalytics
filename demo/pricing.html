@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pricing — Demo Store</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-brand">🛒 DemoStore</div>
+    <div class="nav-links">
+      <a href="/demo/" id="nav-home" class="nav-link">Home</a>
+      <a href="/demo/product.html" id="nav-product" class="nav-link">Product</a>
+      <a href="/demo/pricing.html" id="nav-pricing" class="nav-link active">Pricing</a>
+      <a href="/demo/contact.html" id="nav-contact" class="nav-link">Contact</a>
+    </div>
+  </nav>
+
+  <section class="pricing-hero">
+    <h1>Simple, Transparent Pricing</h1>
+    <p>Start free. Scale as you grow. No hidden fees.</p>
+  </section>
+
+  <section class="pricing-cards">
+    <div class="card pricing-card">
+      <h3>Starter</h3>
+      <div class="pricing-amount">
+        <span class="price">$0</span>
+        <span class="price-period">/month</span>
+      </div>
+      <ul class="pricing-features">
+        <li>✓ 1,000 events/month</li>
+        <li>✓ 1 site</li>
+        <li>✓ 7-day data retention</li>
+        <li>✗ Heatmaps</li>
+        <li>✗ Session replay</li>
+      </ul>
+      <button id="plan-starter" class="btn btn-outline btn-block">Get Started</button>
+    </div>
+
+    <div class="card pricing-card featured">
+      <div class="badge">Most Popular</div>
+      <h3>Pro</h3>
+      <div class="pricing-amount">
+        <span class="price">$49</span>
+        <span class="price-period">/month</span>
+      </div>
+      <ul class="pricing-features">
+        <li>✓ 100,000 events/month</li>
+        <li>✓ 5 sites</li>
+        <li>✓ 90-day data retention</li>
+        <li>✓ Click heatmaps</li>
+        <li>✓ Session replay</li>
+      </ul>
+      <button id="plan-pro" class="btn btn-primary btn-block">Choose Pro</button>
+    </div>
+
+    <div class="card pricing-card">
+      <h3>Enterprise</h3>
+      <div class="pricing-amount">
+        <span class="price">$199</span>
+        <span class="price-period">/month</span>
+      </div>
+      <ul class="pricing-features">
+        <li>✓ Unlimited events</li>
+        <li>✓ Unlimited sites</li>
+        <li>✓ 1-year data retention</li>
+        <li>✓ Click heatmaps</li>
+        <li>✓ Priority support</li>
+      </ul>
+      <button id="plan-enterprise" class="btn btn-outline btn-block">Contact Sales</button>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <p>&copy; 2024 DemoStore. This is a demo site for testing analytics tracking.</p>
+  </footer>
+
+  <script src="/tracker.js" data-api="" data-debug="true" async></script>
+</body>
+</html>

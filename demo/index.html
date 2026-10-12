@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Home — Demo Store</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-brand">🛒 DemoStore</div>
+    <div class="nav-links">
+      <a href="/demo/" id="nav-home" class="nav-link active">Home</a>
+      <a href="/demo/product.html" id="nav-product" class="nav-link">Product</a>
+      <a href="/demo/pricing.html" id="nav-pricing" class="nav-link">Pricing</a>
+      <a href="/demo/contact.html" id="nav-contact" class="nav-link">Contact</a>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <h1>Build Better Products</h1>
+    <p>The all-in-one analytics platform for modern teams. Understand your users, ship faster, grow smarter.</p>
+    <button id="hero-cta" class="btn btn-primary btn-lg">Get Started Free →</button>
+  </section>
+
+  <section class="features">
+    <h2>Why Teams Choose Us</h2>
+    <div class="card-grid">
+      <div class="card" id="feature-analytics">
+        <div class="card-icon">📊</div>
+        <h3>Real-time Analytics</h3>
+        <p>Track every interaction as it happens. See what your users love and where they drop off.</p>
+        <button class="btn btn-outline">Learn More</button>
+      </div>
+      <div class="card" id="feature-heatmaps">
+        <div class="card-icon">🔥</div>
+        <h3>Click Heatmaps</h3>
+        <p>Visualize exactly where users click. Optimize layouts based on real behavior, not guesses.</p>
+        <button class="btn btn-outline">Learn More</button>
+      </div>
+      <div class="card" id="feature-sessions">
+        <div class="card-icon">🎯</div>
+        <h3>Session Replay</h3>
+        <p>Watch user journeys step by step. Identify friction points and improve conversion.</p>
+        <button class="btn btn-outline">Learn More</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="stats-band">
+    <div class="stat">
+      <span class="stat-number">99.9%</span>
+      <span class="stat-label">Uptime</span>
+    </div>
+    <div class="stat">
+      <span class="stat-number">10M+</span>
+      <span class="stat-label">Events Tracked</span>
+    </div>
+    <div class="stat">
+      <span class="stat-number">500+</span>
+      <span class="stat-label">Teams</span>
+    </div>
+    <div class="stat">
+      <span class="stat-number">3x</span>
+      <span class="stat-label">Faster Insights</span>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <p>&copy; 2024 DemoStore. This is a demo site for testing analytics tracking.</p>
+  </footer>
+
+  <script src="/tracker.js" data-api="" data-debug="true" async></script>
+</body>
+</html>

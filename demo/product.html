@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Product — Demo Store</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-brand">🛒 DemoStore</div>
+    <div class="nav-links">
+      <a href="/demo/" id="nav-home" class="nav-link">Home</a>
+      <a href="/demo/product.html" id="nav-product" class="nav-link active">Product</a>
+      <a href="/demo/pricing.html" id="nav-pricing" class="nav-link">Pricing</a>
+      <a href="/demo/contact.html" id="nav-contact" class="nav-link">Contact</a>
+    </div>
+  </nav>
+
+  <section class="product-hero">
+    <div class="product-image">
+      <div class="product-placeholder">📦</div>
+    </div>
+    <div class="product-info">
+      <span class="badge">Most Popular</span>
+      <h1>Analytics Pro Suite</h1>
+      <p class="product-desc">Everything you need to understand user behavior. Track clicks, page views, sessions, and more with our lightweight script.</p>
+      <div class="product-price">
+        <span class="price">$49</span>
+        <span class="price-period">/month</span>
+      </div>
+      <div class="product-actions">
+        <button id="add-to-cart" class="btn btn-primary btn-lg">Add to Cart</button>
+        <button id="try-free" class="btn btn-outline btn-lg">Try Free</button>
+      </div>
+      <ul class="feature-list">
+        <li>✓ Unlimited page views</li>
+        <li>✓ Click heatmaps</li>
+        <li>✓ Session recordings</li>
+        <li>✓ Custom events</li>
+        <li>✓ API access</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="reviews">
+    <h2>What Customers Say</h2>
+    <div class="card-grid">
+      <div class="card review-card">
+        <p class="review-text">"This tool completely changed how we approach UX design. The heatmaps are incredible."</p>
+        <p class="review-author">— Sarah K., Product Lead</p>
+      </div>
+      <div class="card review-card">
+        <p class="review-text">"Setup took 5 minutes. We had actionable insights within the first hour."</p>
+        <p class="review-author">— Mike R., CTO</p>
+      </div>
+      <div class="card review-card">
+        <p class="review-text">"The session replay feature helped us fix a checkout bug that was costing us $10k/month."</p>
+        <p class="review-author">— Lisa W., Engineering Manager</p>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <p>&copy; 2024 DemoStore. This is a demo site for testing analytics tracking.</p>
+  </footer>
+
+  <script src="/tracker.js" data-api="" data-debug="true" async></script>
+</body>
+</html>
