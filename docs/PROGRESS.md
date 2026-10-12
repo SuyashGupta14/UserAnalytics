@@ -42,3 +42,18 @@
 - 9/9 tests passing including beacon ingestion & tracker serving
 
 **Status:** ✅ Complete
+
+## Phase 4 — Analytics Dashboard Frontend
+- React 19 + Vite + TypeScript frontend with custom Vanilla CSS design system
+- Sleek dark theme with Inter & JetBrains Mono typography, HSL tailored accents, and glassmorphic cards
+- Overview KPI cards displaying Total Sessions, Page Views, Clicks, Avg Duration, and Total Telemetry Events
+- Session explorer table with search filtering, sort dropdown, copyable UUIDs, and pagination
+- Slide-over chronological timeline drawer reconstructing session stream with offset timestamps, coordinates, and inspected DOM targets
+- Canvas-based Heatmap Visualizer with dual modes:
+  - Thermal density gradient map (alpha radial gradients + thermal palette colorization)
+  - Scatter click coordinate dots with glowing pulses
+  - Interactive tooltip inspection on hover showing coordinates and target element data
+- In-app interactive simulator to emit real-time clicks and page_views directly into the pipeline
+- Zero-error production build (`npm run build`) and Express SPA static serving integration
+
+**Status:** ✅ Complete

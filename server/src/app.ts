@@ -67,7 +67,23 @@ export function createApp() {
   const demoPath = path.resolve(__dirname, '../../demo');
   app.use('/demo', express.static(demoPath));
 
-  // 404 handler
+  // Serve dashboard static files if built
+  const dashboardDist = path.resolve(__dirname, '../../dashboard/dist');
+  app.use(express.static(dashboardDist));
+
+  // SPA fallback for non-API GET requests (Express 5 compatible)
+  app.use((req, res, next) => {
+    if (req.method !== 'GET') return next();
+    if (req.path.startsWith('/api') || req.path.startsWith('/demo') || req.path === '/tracker.js') {
+      return next();
+    }
+    const indexHtml = path.join(dashboardDist, 'index.html');
+    res.sendFile(indexHtml, (err) => {
+      if (err) next();
+    });
+  });
+
+  // 404 handler for unmatched routes
   app.use((_req, res) => {
     res.status(404).json({ error: { code: 'NOT_FOUND', message: 'Route not found' } });
   });
