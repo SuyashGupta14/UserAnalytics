@@ -180,35 +180,21 @@ export function App() {
         {/* Tab Content */}
         {activeTab === 'overview' && (
           <div className="tab-pane">
-            <div className="overview-split">
-              <div className="overview-left">
-                <SessionList
-                  sessions={sessions.slice(0, 8)}
-                  loading={loadingSessions}
-                  onSelectSession={handleSelectSession}
-                  selectedSessionId={selectedSessionId || undefined}
-                  currentPage={currentPage}
-                  totalPages={1}
-                  onPageChange={() => {}}
-                  sortField={sortField}
-                  sortOrder="desc"
-                  onSortChange={(field) => {
-                    setSortField(field);
-                    loadSessions(1, field);
-                  }}
-                />
-              </div>
-              <div className="overview-right">
-                <HeatmapViewer
-                  pages={heatmapPages}
-                  selectedPageUrl={selectedHeatmapUrl}
-                  onSelectPage={setSelectedHeatmapUrl}
-                  heatmapData={heatmapData}
-                  loading={loadingHeatmap}
-                  onRefresh={() => loadHeatmap(selectedHeatmapUrl)}
-                />
-              </div>
-            </div>
+            <SessionList
+              sessions={sessions}
+              loading={loadingSessions}
+              onSelectSession={handleSelectSession}
+              selectedSessionId={selectedSessionId || undefined}
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={(page) => loadSessions(page, sortField)}
+              sortField={sortField}
+              sortOrder="desc"
+              onSortChange={(field) => {
+                setSortField(field);
+                loadSessions(1, field);
+              }}
+            />
           </div>
         )}
 
