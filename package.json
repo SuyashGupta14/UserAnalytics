@@ -3,13 +3,9 @@
   "version": "1.0.0",
   "private": true,
   "description": "User Interaction Tracking & Analytics Full-Stack Application",
-  "workspaces": [
-    "server",
-    "dashboard"
-  ],
   "scripts": {
-    "install:all": "npm install --prefix server && npm install --prefix dashboard",
-    "build": "npm install --prefix server && npm install --prefix dashboard && npm run build --prefix dashboard && npm run build --prefix server",
+    "install:all": "npm install --include=dev --prefix server && npm install --include=dev --prefix dashboard",
+    "build": "npm install --include=dev --prefix server && npm install --include=dev --prefix dashboard && npm run build --prefix dashboard && npm run build --prefix server",
     "start": "npm start --prefix server",
     "test": "npm test --prefix server",
     "seed": "npm run seed --prefix server",
