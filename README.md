@@ -1,149 +1,168 @@
-# User Analytics Application
+# CausalFunnel User Analytics Platform
 
-> A full-stack application that tracks user interactions on webpages and displays them in an analytics dashboard — built for the CausalFunnel Full Stack Engineer assessment.
+> A production-ready full-stack application that tracks user interactions on webpages and visualizes them in a real-time analytics dashboard with session explorer and canvas heatmap.
 
-<!-- TODO: Add live links and screenshots after deployment -->
+---
 
-## Features
+## 🌟 Key Features
 
-- **Event Tracking Script** — Lightweight JS tracker that captures `page_view` and `click` events on any webpage
-- **Sessions View** — List all sessions with event counts; click to see the ordered user journey
-- **Heatmap View** — Select a page URL and visualize click positions as dots
-- **Real-time Ingestion** — Events sent via `sendBeacon` for reliable, non-blocking delivery
-- **Seed Data** — Realistic demo data with clustered hotspots for immediate visual impact
+1. **Client-Side Event Tracking Script (`tracker.js`)**
+   - Zero external dependencies (<3KB compressed).
+   - Tracks `page_view` and `click` interactions automatically.
+   - Captures high-precision $x, y$ coordinates, viewport dimensions ($W \times H$), total document bounds, and target DOM metadata (`<button>`, `id`, `class`, text).
+   - Session lifecycle: 30-minute sliding window stored in `localStorage` with fallback to `cookie`.
+   - Single-Page Application (SPA) route change interception (`pushState`, `replaceState`, `popstate`).
+   - Non-blocking batch delivery (10 events or 1.5s interval) and guaranteed page-unload flushing via `navigator.sendBeacon`.
+   - Privacy-first: automatic sanitization and exclusion of sensitive form inputs (passwords, payment fields).
 
-## Tech Stack
+2. **Real-Time Analytics Dashboard**
+   - **KPI Overview Cards**: Total Sessions, Page Views, Clicks, Avg Session Duration, and Total Telemetry Events.
+   - **Session Explorer**: Paginated session listing, search by Session ID, multi-criteria sorting (Most Recent, Longest Duration, Most Clicks, Total Events).
+   - **Chronological Timeline Stream**: Detailed drawer reconstructing the exact user journey with relative offset timestamps (`+00:14`, `+01:23`), click coordinates, and target element inspection pills.
+   - **Interactive Canvas Heatmap & Click Map**:
+     - Dual-mode renderer: **Thermal Density Heatmap** (radial gaussian gradients colorized with thermal palette) & **Scatter Dot Map** (pulsing glowing coordinates).
+     - Hover inspection tooltip displaying exact $(x, y)$ coordinates and clicked element tags.
+     - Controls for radius (15px-60px), intensity (20%-100%), and page selection.
+   - **In-App Simulator**: Instant telemetry event emitter and copy-paste embed code snippet.
+
+3. **Interactive E-Commerce Demo Store**
+   - 4 realistic demo pages (`/demo/index.html`, `/demo/product.html`, `/demo/pricing.html`, `/demo/contact.html`) instrumented with `tracker.js`.
+
+4. **Production-Ready Seed Data**
+   - Generates 150 realistic sessions with gaussian hotspot click clusters across key call-to-actions, navigation links, and product cards.
+
+---
+
+## 🏗 Architecture
+
+```
+┌─────────────────────────────────┐
+│       Webpage / Client          │
+│   (demo/ or any external site)  │
+└────────────────┬────────────────┘
+                 │
+                 │ 1. Event Tracking (page_view, click with x,y)
+                 │    Buffered & Delivered via fetch() / sendBeacon()
+                 ▼
+┌─────────────────────────────────┐
+│        Node.js Backend          │
+│     (Express 5 + TypeScript)    │
+│  - Zod Runtime Validation       │
+│  - URL Normalization            │
+│  - Rate Limiting & Helmet       │
+└────────────────┬────────────────┘
+                 │
+                 │ 2. Ingestion & Aggregation
+                 ▼
+┌─────────────────────────────────┐
+│      MongoDB Atlas Cluster      │
+│  - Compound Indexed Events      │
+│  - High-Speed Aggregations      │
+└────────────────┬────────────────┘
+                 │
+                 │ 3. Analytics Query APIs (/api/*)
+                 ▼
+┌─────────────────────────────────┐
+│    React Analytics Dashboard    │
+│  - KPI Cards & Session Timeline │
+│  - Canvas Heatmap Dual-Mode     │
+└─────────────────────────────────┘
+```
+
+---
+
+## 🛠 Tech Stack
 
 | Layer | Technology |
-|-------|------------|
-| Tracker | Vanilla JS (IIFE, bundled with esbuild) |
-| Backend | Node.js, Express, TypeScript, Mongoose, Zod |
-| Database | MongoDB |
-| Dashboard | Next.js 14 (App Router), TypeScript, Tailwind CSS, TanStack Query |
-| Testing | Vitest, Supertest, mongodb-memory-server |
+|---|---|
+| **Tracking Script** | Vanilla JavaScript (IIFE, zero dependencies, sendBeacon) |
+| **Backend API** | Node.js, Express 5, TypeScript, Mongoose, Zod, Helmet, Pino |
+| **Database** | MongoDB Atlas (Compound indexes: `session_id + timestamp`, `page_url + type + timestamp`) |
+| **Frontend Dashboard** | React 19, Vite, TypeScript, Vanilla CSS Design System, Lucide Icons, HTML5 Canvas |
+| **Testing** | Vitest, Supertest, mongodb-memory-server |
 
-## Architecture
+---
 
-```
-┌──────────────┐    POST /api/events    ┌──────────────┐    ┌──────────────┐
-│   Tracker    │ ───────────────────────>│   Express    │───>│   MongoDB    │
-│  (any page)  │                        │   Backend    │<───│              │
-└──────────────┘                        └──────┬───────┘    └──────────────┘
-                                               │
-                                        GET /api/*
-                                               │
-                                        ┌──────▼───────┐
-                                        │   Next.js    │
-                                        │  Dashboard   │
-                                        └──────────────┘
-```
-
-## Data Model
-
-Single `events` collection — sessions are derived via aggregation. Each event stores:
-- `session_id`, `type`, `page_url`, `page_title`, `timestamp`, `received_at`
-- Click events additionally store: `x`, `y`, `viewport_w/h`, `page_w/h`, `target`
-
-**Trade-off:** No separate `sessions` collection keeps writes cheap and the schema simple. Session list cost grows with data; would add a sessions collection or materialized view at scale.
-
-## Setup
+## 🚀 Quick Start Guide
 
 ### Prerequisites
 - Node.js 20+
-- MongoDB (local install or [Atlas free tier](https://www.mongodb.com/atlas))
+- MongoDB Atlas connection string (or local MongoDB)
 
-### Quick Start
+### 1. Installation
 
 ```bash
-# Clone the repo
-git clone https://github.com/YOUR_USERNAME/user-analytics.git
-cd user-analytics
+# Clone the repository
+git clone https://github.com/SuyashGupta14/UserAnalytics.git
+cd UserAnalytics
 
-# Server
-cd server
-cp .env.example .env    # Edit MONGODB_URI if needed
-npm install
-npm run build
-npm run seed            # Load demo data
-npm run dev
-
-# In another terminal — Tracker
-cd tracker
-npm install
-npm run build
-
-# In another terminal — Dashboard
-cd dashboard
-cp .env.example .env
-npm install
-npm run dev
+# Install dependencies for both server and dashboard
+npm run install:all
 ```
 
-Then open:
-- **Demo site:** http://localhost:4000/demo — click around to generate events
-- **Dashboard:** http://localhost:3000 — view sessions, journeys, and heatmap
+### 2. Environment Setup
 
-## Embedding the Tracker
+Create `server/.env`:
+```env
+PORT=4000
+MONGODB_URI=your_mongodb_connection_string
+NODE_ENV=development
+```
 
-Add to any webpage:
+### 3. Build & Seed Data
+
+```bash
+# Build frontend dashboard bundle and backend TypeScript
+npm run build
+
+# Seed database with 150 realistic user sessions & click hotspots
+npm run seed
+```
+
+### 4. Run the Application
+
+```bash
+npm start
+```
+
+Now open:
+- **Analytics Dashboard**: [http://localhost:4000/](http://localhost:4000/)
+- **Demo Web Store**: [http://localhost:4000/demo/](http://localhost:4000/demo/)
+- **Health Check**: [http://localhost:4000/api/health](http://localhost:4000/api/health)
+
+---
+
+## 🔌 Embedding the Tracker on Any Site
+
+Drop this single tag into the `<head>` or before `</body>` of any website:
+
 ```html
-<script src="https://YOUR-API/tracker.js" data-api="https://YOUR-API" async></script>
+<script
+  src="http://localhost:4000/tracker.js"
+  data-endpoint="http://localhost:4000/api/events"
+  async>
+</script>
 ```
 
-Options: `data-debug="true"` for console logging, `data-ignore-dnt` to track regardless of Do Not Track.
+---
 
-## API Reference
+## 📡 API Reference
 
-See [docs/API.md](docs/API.md) for full endpoint documentation with curl examples.
+| Method | Endpoint | Description |
+|---|---|---|
+| `POST` | `/api/events` | Ingest single or batched events (up to 50). Validates with Zod schema. |
+| `GET` | `/api/stats` | Aggregated KPIs (total sessions, events, clicks, views, avg duration). |
+| `GET` | `/api/sessions` | Paginated sessions list with duration, view counts, and click counts. |
+| `GET` | `/api/sessions/:id/events` | Chronological event stream for a specific session. |
+| `GET` | `/api/heatmap?url=<url>` | Click coordinate points $(x, y)$, dimensions, and target metadata. |
+| `GET` | `/api/heatmap/pages` | List distinct pages with click and view aggregations. |
+| `GET` | `/api/health` | System uptime and MongoDB database status. |
 
-| Endpoint | Description |
-|----------|-------------|
-| `POST /api/events` | Receive and store events |
-| `GET /api/sessions` | List sessions with event counts |
-| `GET /api/sessions/:id/events` | Get all events for a session |
-| `GET /api/heatmap?url=` | Get click data for a page |
-| `GET /api/heatmap/pages` | List pages with click counts |
-| `GET /api/stats` | Overview KPIs |
+---
 
-## Running Tests
+## 🧪 Running Automated Tests
 
 ```bash
-# Backend tests (uses mongodb-memory-server, no real DB needed)
-cd server && npm test
-
-# Tracker tests
-cd tracker && npm test
+npm test
 ```
-
-## Deployment
-
-<!-- TODO: Add deployment details -->
-
-- **Backend:** Render / Railway
-- **Dashboard:** Vercel
-- **Database:** MongoDB Atlas free tier
-
-> Note: Free-tier hosting instances may sleep after inactivity. Expect a brief delay on the first request.
-
-## Assumptions & Trade-offs
-
-- "Node.js / Flask" interpreted as Node.js (Express)
-- Sessions are derived by aggregation, not stored in their own collection
-- Session = localStorage id with 30-minute inactivity rotation; cookie and memory fallbacks
-- Page identity = origin + pathname; query strings and hashes are dropped
-- Client timestamps are trusted but sanity-checked; `received_at` stored as second source of truth
-- Heatmap uses document coordinates normalized by page size; may not align perfectly across very different breakpoints
-- No authentication or multi-tenancy (stated as deliberate scope cut)
-- Events can be lost if the browser dies before flush (best-effort via `sendBeacon`)
-- Heatmap capped at 10,000 points per request
-
-## What I Would Do Next
-
-- Authentication and multi-tenancy (per-site API keys)
-- SPA navigation detection (`pushState`/`popstate`)
-- Heat mode and grid mode for heatmap visualization
-- Real-time dashboard updates via WebSocket
-- Sessions collection or materialized view for faster reads at scale
-- Rate limiting per API key instead of per IP
-- Event replay / session recording
-- Export data as CSV
+Runs 9 comprehensive integration tests covering event validation, URL normalization, batch ingestion, session aggregations, and beacon delivery.
