@@ -243,3 +243,33 @@ describe('GET /api/heatmap', () => {
     await request.get('/api/heatmap').expect(400);
   });
 });
+
+describe('GET /tracker.js and Beacon ingestion', () => {
+  it('serves tracker.js with javascript content type', async () => {
+    const res = await request.get('/tracker.js').expect(200);
+    expect(res.headers['content-type']).toMatch(/javascript/);
+    expect(res.text).toContain('CausalTracker');
+  });
+
+  it('accepts text/plain payload (sendBeacon format)', async () => {
+    const beaconPayload = JSON.stringify([
+      {
+        session_id: 'beacon-session',
+        type: 'page_view',
+        page_url: 'https://example.com/beacon',
+        timestamp: new Date().toISOString(),
+      },
+    ]);
+
+    await request
+      .post('/api/events')
+      .set('Content-Type', 'text/plain;charset=UTF-8')
+      .send(beaconPayload)
+      .expect(201);
+
+    const doc = await Event.findOne({ session_id: 'beacon-session' }).lean();
+    expect(doc).toBeDefined();
+    expect(doc?.page_url).toBe('https://example.com/beacon');
+  });
+});
+

@@ -58,8 +58,10 @@ export function createApp() {
   app.use('/api/health', healthRouter);
 
   // Serve tracker script
-  const trackerPath = path.resolve(__dirname, '../../tracker/dist');
-  app.use('/tracker.js', express.static(path.join(trackerPath, 'tracker.js')));
+  const trackerFile = path.resolve(__dirname, '../../tracker/tracker.js');
+  app.get('/tracker.js', (_req, res) => {
+    res.type('application/javascript').sendFile(trackerFile);
+  });
 
   // Serve demo site
   const demoPath = path.resolve(__dirname, '../../demo');

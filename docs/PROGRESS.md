@@ -29,3 +29,16 @@
 - Automated Vitest suite passing (7/7 tests)
 
 **Status:** ✅ Complete
+
+## Phase 3 — Client Tracking Script & Demo Store
+- Standalone zero-dependency tracking library `tracker/tracker.js`
+- Session lifecycle with UUID generator, localStorage storage & cookie fallback (30-min sliding window)
+- Automatic `page_view` tracking with SPA route change interception (`pushState`, `replaceState`, `popstate`)
+- Global click listener with accurate coordinate calculation (`x`, `y`), viewport dimensions, and page dimensions
+- DOM target metadata capture with privacy redaction for sensitive fields
+- In-memory event buffer with automatic batching (10 events or 1.5s interval)
+- Unload delivery using `navigator.sendBeacon` and `fetch({ keepalive: true })`
+- Express static endpoint `/tracker.js` and demo site hosting at `/demo`
+- 9/9 tests passing including beacon ingestion & tracker serving
+
+**Status:** ✅ Complete
