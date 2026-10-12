@@ -126,7 +126,28 @@ export async function fetchSessions(params: {
   if (params.order) query.set('order', params.order);
 
   const res = await fetch(`${API_BASE}/api/sessions?${query.toString()}`);
-  return handleResponse<SessionsResponse>(res);
+  const json: any = await handleResponse<any>(res);
+  const rawList = json.sessions || json.data || [];
+  const sessions = rawList.map((s: any) => ({
+    session_id: s.session_id || s._id,
+    first_seen: s.first_seen,
+    last_seen: s.last_seen,
+    duration_seconds: s.duration_seconds ?? Math.round((s.duration_ms || 0) / 1000),
+    event_count: s.event_count || 0,
+    page_views: s.page_views ?? s.page_view_count ?? 0,
+    clicks: s.clicks ?? s.click_count ?? 0,
+    landing_page: s.landing_page || s.entry_page,
+  }));
+
+  return {
+    sessions,
+    pagination: {
+      page: json.pagination?.page || 1,
+      limit: json.pagination?.limit || 20,
+      total: json.pagination?.total || 0,
+      totalPages: json.pagination?.totalPages || json.pagination?.total_pages || 1,
+    },
+  };
 }
 
 export async function fetchSessionEvents(sessionId: string): Promise<SessionEventsResponse> {
