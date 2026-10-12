@@ -16,6 +16,9 @@ const __dirname = path.dirname(__filename);
 export function createApp() {
   const app = express();
 
+  // Trust reverse proxy (e.g. Render) to correctly identify client IPs for rate limiting
+  app.set('trust proxy', 1);
+
   // Security
   app.use(helmet({
     contentSecurityPolicy: false, // Allow demo pages and tracker to load
