@@ -282,7 +282,7 @@
 /* ── KPI Stats Grid ──────────────────────────────────────────────────────── */
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr));
   gap: 1.25rem;
 }
 
@@ -1023,7 +1023,7 @@
   align-items: center;
   gap: 0.6rem;
   flex: 1;
-  min-width: 280px;
+  min-width: min(100%, 260px);
 }
 
 .toolbar-label {
@@ -1106,6 +1106,7 @@
 .heatmap-status-ribbon {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: 1.5rem;
   font-size: 0.82rem;
   color: var(--text-muted);
@@ -1459,31 +1460,328 @@
   font-weight: 700;
 }
 
-@media (max-width: 1100px) {
+/* ── Responsive System ─────────────────────────────────────────────────── */
+@media (max-width: 1200px) {
+  .dashboard-main {
+    padding: 1.25rem 1.5rem 2.5rem;
+  }
+}
+
+@media (max-width: 1024px) {
   .app-header {
-    padding: 0.5rem 1.15rem;
+    padding: 0.5rem 1rem;
     gap: 0.75rem;
   }
-  .header-left {
-    gap: 0.85rem;
+
+  .stats-grid {
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem;
+  }
+
+  .heatmap-toolbar {
+    gap: 0.75rem;
   }
 }
 
 @media (max-width: 860px) {
   .app-header {
-    flex-wrap: wrap;
-    padding: 0.5rem 1rem;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-areas:
+      "brand actions"
+      "nav nav";
+    padding: 0.6rem 0.85rem;
+    gap: 0.55rem 0.75rem;
   }
+
   .header-left {
-    flex: 1 1 100%;
+    display: contents;
+  }
+
+  .brand {
+    grid-area: brand;
+    align-self: center;
+  }
+
+  .header-nav {
+    grid-area: nav;
+    width: 100%;
+    overflow-x: auto;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding: 0.25rem 0.35rem;
+    display: flex;
+    gap: 0.35rem;
+  }
+
+  .header-nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  .header-right {
+    grid-area: actions;
+    justify-content: flex-end;
+    align-self: center;
+    gap: 0.5rem;
+  }
+
+  .dashboard-main {
+    padding: 1rem 0.85rem 2.5rem;
+    gap: 1rem;
+  }
+
+  .stats-grid {
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 180px), 1fr));
+    gap: 0.75rem;
+  }
+
+  .stat-card {
+    padding: 1rem 1.1rem;
+    gap: 0.5rem;
+  }
+
+  .stat-card-value {
+    font-size: 1.5rem;
+  }
+
+  .section-container {
+    padding: 1rem 0.85rem;
+    border-radius: var(--radius-lg);
+    gap: 1rem;
+  }
+
+  .section-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+  }
+
+  .section-controls {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.5rem;
+    width: 100%;
+  }
+
+  .search-box {
+    width: 100%;
+  }
+
+  .sort-control {
+    width: 100%;
     justify-content: space-between;
   }
-  .header-nav {
-    overflow-x: auto;
-    max-width: 100%;
+
+  .sort-select {
+    flex: 1;
   }
-  .header-right {
-    margin-left: auto;
+
+  .table-responsive {
+    -webkit-overflow-scrolling: touch;
+    border-radius: var(--radius-md);
+  }
+
+  .sessions-table {
+    min-width: 680px;
+  }
+
+  .heatmap-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+  }
+
+  .heatmap-page-select-wrap {
+    min-width: 0;
+    width: 100%;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.35rem;
+  }
+
+  .heatmap-select {
+    width: 100%;
+  }
+
+  .heatmap-mode-toggles {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .btn-mode-toggle {
+    justify-content: center;
+    padding: 0.45rem 0.5rem;
+    font-size: 0.75rem;
+  }
+
+  .heatmap-sliders {
+    width: 100%;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .heatmap-canvas-container {
+    height: 420px;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .tester-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .tester-card {
+    padding: 0.5rem;
   }
 }
+
+@media (max-width: 640px) {
+  .drawer-content {
+    width: 100%;
+    max-width: 100vw;
+    border-left: none;
+    border-radius: 0;
+  }
+
+  .drawer-header {
+    padding: 1rem 0.85rem;
+  }
+
+  .drawer-session-id-row {
+    flex-wrap: wrap;
+  }
+
+  .drawer-session-id {
+    font-size: 0.82rem;
+    max-width: 220px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .drawer-summary-ribbon {
+    grid-template-columns: repeat(2, 1fr);
+    padding: 0.75rem 0.85rem;
+    gap: 0.5rem;
+  }
+
+  .ribbon-item {
+    font-size: 0.72rem;
+    gap: 0.35rem;
+  }
+
+  .drawer-body {
+    padding: 1rem 0.85rem;
+  }
+
+  .timeline-container {
+    padding-left: 1.5rem;
+    gap: 1rem;
+  }
+
+  .timeline-spine {
+    left: 9px;
+  }
+
+  .timeline-dot {
+    left: -1.5rem;
+    width: 22px;
+    height: 22px;
+  }
+
+  .timeline-card {
+    padding: 0.75rem 0.85rem;
+  }
+
+  .click-details-box {
+    padding: 0.5rem 0.65rem;
+  }
+
+  .click-coord-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.2rem;
+  }
+
+  .target-element-badge {
+    word-break: break-all;
+  }
+
+  .pagination-bar {
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .demo-pages-links {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+
+  .tester-action-btns {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .btn-primary, .btn-secondary {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 540px) {
+  .status-label {
+    display: none;
+  }
+
+  .btn-demo-link span {
+    display: none;
+  }
+
+  .btn-demo-link {
+    padding: 0.4rem 0.55rem;
+  }
+
+  .toggle-text {
+    font-size: 0.7rem;
+  }
+
+  .brand-name {
+    font-size: 1rem;
+  }
+
+  .heatmap-status-ribbon {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.4rem;
+  }
+
+  .heatmap-canvas-container {
+    height: 360px;
+  }
+}
+
+@media (max-width: 420px) {
+  .dashboard-main {
+    padding: 0.75rem 0.6rem 2rem;
+    gap: 0.85rem;
+  }
+
+  .brand-badge {
+    display: none;
+  }
+
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .code-pre {
+    font-size: 0.72rem;
+    padding: 0.75rem;
+  }
+}
+
 
