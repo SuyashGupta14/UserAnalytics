@@ -25,7 +25,7 @@ export const Header: React.FC<HeaderProps> = ({
       <div className="header-left">
         <div className="brand">
           <div className="brand-icon">
-            <Activity className="icon-pulse" size={22} />
+            <Activity className="icon-pulse" size={18} />
           </div>
           <div className="brand-text">
             <span className="brand-name">CausalFunnel</span>
@@ -33,33 +33,33 @@ export const Header: React.FC<HeaderProps> = ({
           </div>
         </div>
 
-        <nav className="header-nav">
+        <nav className="header-nav" aria-label="Dashboard navigation">
           <button
             className={`nav-tab ${activeTab === 'overview' ? 'active' : ''}`}
             onClick={() => setActiveTab('overview')}
           >
-            <BarChart3 size={16} />
+            <BarChart3 size={15} />
             <span>Overview</span>
           </button>
           <button
             className={`nav-tab ${activeTab === 'sessions' ? 'active' : ''}`}
             onClick={() => setActiveTab('sessions')}
           >
-            <Users size={16} />
+            <Users size={15} />
             <span>Sessions</span>
           </button>
           <button
             className={`nav-tab ${activeTab === 'heatmap' ? 'active' : ''}`}
             onClick={() => setActiveTab('heatmap')}
           >
-            <Flame size={16} />
+            <Flame size={15} />
             <span>Heatmap & Click Map</span>
           </button>
           <button
             className={`nav-tab ${activeTab === 'demo' ? 'active' : ''}`}
             onClick={() => setActiveTab('demo')}
           >
-            <Play size={16} />
+            <Play size={14} />
             <span>Live Demo Store</span>
           </button>
         </nav>
@@ -86,7 +86,7 @@ export const Header: React.FC<HeaderProps> = ({
           disabled={isRefreshing}
           title="Refresh data"
         >
-          <RefreshCw size={16} className={isRefreshing ? 'spin' : ''} />
+          <RefreshCw size={14} className={isRefreshing ? 'spin' : ''} />
         </button>
 
         <a
@@ -96,7 +96,7 @@ export const Header: React.FC<HeaderProps> = ({
           className="btn-demo-link"
         >
           <span>Open Demo Store</span>
-          <ExternalLink size={14} />
+          <ExternalLink size={13} />
         </a>
       </div>
     </header>
