@@ -7,7 +7,7 @@ import { Event } from '../src/models/Event.js';
 
 let mongoServer: MongoMemoryServer;
 let app: ReturnType<typeof createApp>;
-let request: supertest.SuperTest<supertest.Test>;
+let request: ReturnType<typeof supertest>;
 
 beforeAll(async () => {
   mongoServer = await MongoMemoryServer.create();
